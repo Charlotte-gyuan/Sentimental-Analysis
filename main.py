@@ -5,8 +5,8 @@ from sklearn.naive_bayes import GaussianNB
 
 
 def main():
-    f = open("training_dataset.txt")
-    file = f.read()
+    with open("training_dataset.txt",'r') as f:
+        file = f.read()
     lines = file.split('\n')
     data =[]
     y =[]
@@ -15,8 +15,8 @@ def main():
         y.append(line[0])
 
 
-    f2 = open("test_dataset.txt")
-    testfile = f2.read()
+    with open("test_dataset.txt") as f:
+        testfile = f.read()
     testdata = testfile.split('\n')
 
 
@@ -27,8 +27,10 @@ def main():
 
 
     gnb = GaussianNB()
-    scores = cross_val_score(gnb, x, y, cv=5, scoring='accuracy')
+
+    scores = cross_val_score(gnb, x, y, cv=5, scoring='f1_weighted')#accuracy be default
     print(scores)
+    print("Means: ",scores.mean())
 
 
 
@@ -40,8 +42,6 @@ def main():
     for yi, doci in zip(y_test, testdata):
         print("{}\t{}".format(yi, doci))
 
-    f.close()
-    f2.close()
 
 
 if __name__=='__main__':
