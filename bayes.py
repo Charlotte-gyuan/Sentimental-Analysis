@@ -39,8 +39,10 @@ def main():
 
 
     y_test = gnb.predict(x_test)
-    for yi, doci in zip(y_test, testdata):
-        print("{}\t{}".format(yi, doci))
+
+    print(y_test)
+    # for yi, doci in zip(y_test, testdata):
+    #     print("{}\t{}".format(yi, doci))
 
 
 
