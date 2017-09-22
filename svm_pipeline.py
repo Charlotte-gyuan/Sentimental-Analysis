@@ -53,4 +53,4 @@ if __name__ == '__main__':
         clf = classifier_pipeline.fit(documents_train[:-10], y_train[:-10])  # Choose our training data
         testdata = classifier_pipeline.named_steps.CountVectorizer.transform(documents_train[-2:]).toarray()
         print("testing data vector:\n", testdata, "\nprediction:\n",
-              classifier_pipeline.named_steps['nb'].predict(testdata))
+              classifier_pipeline.named_steps.LinearSVC.predict(testdata))
