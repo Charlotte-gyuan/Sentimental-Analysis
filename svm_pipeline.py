@@ -6,7 +6,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import cross_val_score
 from sklearn.base import TransformerMixin
-
+import time
 class DenseTransformer(TransformerMixin):
 
     def transform(self, X, y=None, **fit_params):
@@ -22,6 +22,8 @@ class DenseTransformer(TransformerMixin):
 
 if __name__ == '__main__':
 
+    t0 = time.time()
+
 
     with open("training_dataset.txt", 'r') as f:
         file = f.read()
@@ -32,6 +34,10 @@ if __name__ == '__main__':
         documents_train.append(line[2:])
         y_train.append(line[0])
 
+    with open("test_dataset.txt") as f:
+        testfile = f.read()
+    testdata = testfile.split('\n')
+
 
     # shufle training data
     indices = np.random.permutation(len(documents_train))
@@ -39,7 +45,7 @@ if __name__ == '__main__':
     y_train = np.array(y_train)[indices]
 
 
-    cv = 1
+    cv = 2
     classifier_pipeline = make_pipeline(CountVectorizer(ngram_range=(2, 3)),
                                         DenseTransformer(),
                                         LinearSVC())
@@ -49,8 +55,10 @@ if __name__ == '__main__':
         scores = cross_val_score(classifier_pipeline, documents_train, y_train, cv=5, scoring='f1_weighted')
         print("Average f1_weighted scores: ", scores.mean())
     else:
-        # Train the model by ourselves and predict
-        clf = classifier_pipeline.fit(documents_train[:-10], y_train[:-10])  # Choose our training data
-        testdata = classifier_pipeline.named_steps.CountVectorizer.transform(documents_train[-2:]).toarray()
-        print("testing data vector:\n", testdata, "\nprediction:\n",
-              classifier_pipeline.named_steps['nb'].predict(testdata))
+
+        clf = classifier_pipeline.fit(documents_train, y_train)  # Choose our training data
+        testdata = classifier_pipeline.named_steps.countvectorizer.transform(testdata).toarray()
+        print(classifier_pipeline.named_steps.linearsvc.predict(testdata))
+
+    t = time.time()
+    print("elapsed_time: ", t - t0) #7.095525026321411
