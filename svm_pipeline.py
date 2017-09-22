@@ -51,6 +51,6 @@ if __name__ == '__main__':
     else:
         # Train the model by ourselves and predict
         clf = classifier_pipeline.fit(documents_train[:-10], y_train[:-10])  # Choose our training data
-        testdata = classifier_pipeline.named_steps.CountVectorizer.transform(documents_train[-2:]).toarray()
+        testdata = classifier_pipeline.named_steps.countvectorizer.transform(documents_train[-2:]).toarray()
         print("testing data vector:\n", testdata, "\nprediction:\n",
-              classifier_pipeline.named_steps.LinearSVC.predict(testdata))
+              classifier_pipeline.named_steps.linearsvc.predict(testdata))
